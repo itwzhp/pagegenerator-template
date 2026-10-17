@@ -1,18 +1,81 @@
 ---
+// Strona główna. Modelowy układ (DESIGN.md §11): hero → dla kogo → aktualności → kalendarz → 1,5% → w liczbach.
+// Plik jednostki: sekcje można usuwać, przestawiać i dodawać.
 import Strona from '@core/layouts/Strona.astro';
+import Hero from '@core/components/Hero.astro';
+import Sekcja from '@core/components/Sekcja.astro';
+import GrupyWiekowe from '@core/components/GrupyWiekowe.astro';
+import ListaAktualnosci from '@core/components/ListaAktualnosci.astro';
+import ListaWydarzen from '@core/components/ListaWydarzen.astro';
+import JedenProcent from '@core/components/JedenProcent.astro';
+import Liczby from '@core/components/Liczby.astro';
+import Przycisk from '@core/components/Przycisk.astro';
 import { site } from '@core/lib/site';
+import { pobierzAktualnosci, pobierzWydarzenia } from '@core/lib/tresci';
+
+const aktualnosci = await pobierzAktualnosci(3);
+const wydarzenia = await pobierzWydarzenia('nadchodzace', 3);
 ---
 
 <Strona>
-  <section class="zhp-kontener powitanie">
-    <h1>Czuwaj! 👋</h1>
-    <p>To jest strona: <strong>{site.nazwa}</strong>.</p>
-    <p>Szkielet szablonu działa. Uruchom <code>/zhp-zbuduj-strone</code>, żeby zbudować właściwą stronę.</p>
-  </section>
+  <Hero
+    nadtytul={site.nazwa}
+    tytul="Przygoda, która zostaje na całe życie"
+    wstep="Gromady zuchowe i drużyny harcerskie w Przykładowie i okolicy. Biwaki, rajdy, obozy – i ludzie, z którymi chce się działać."
+    przyciski={[
+      { etykieta: 'Zapisz dziecko', href: '/dla-rodzicow#zapisy' },
+      { etykieta: 'Znajdź drużynę', href: '/jednostki' },
+    ]}
+    szybkieLinki={[
+      { etykieta: 'Ile to kosztuje?', href: '/dla-rodzicow#koszty' },
+      { etykieta: 'Gdzie są zbiórki?', href: '/jednostki' },
+      { etykieta: 'Kiedy obóz?', href: '/wydarzenia' },
+    ]}
+  />
+
+  <Sekcja tytul="Dla kogo jest harcerstwo" tlo="tint">
+    <GrupyWiekowe linkDo="/jednostki" />
+  </Sekcja>
+
+  {
+    aktualnosci.length > 0 && (
+      <Sekcja tytul="Aktualności">
+        <ListaAktualnosci wpisy={aktualnosci} />
+        <p class="zhp-dalej">
+          <Przycisk href="/aktualnosci" wariant="drugorzedny">
+            Więcej aktualności
+          </Przycisk>
+        </p>
+      </Sekcja>
+    )
+  }
+
+  {
+    wydarzenia.length > 0 && (
+      <Sekcja tytul="Najbliższe wydarzenia" tlo="tint">
+        <ListaWydarzen wydarzenia={wydarzenia} />
+        <p class="zhp-dalej">
+          <Przycisk href="/wydarzenia" wariant="drugorzedny">
+            Cały kalendarz
+          </Przycisk>
+        </p>
+      </Sekcja>
+    )
+  }
+
+  {site.jedenProcent && <JedenProcent wiecej="/wesprzyj" />}
+
+  {
+    site.liczby && (
+      <Sekcja tytul="Hufiec w liczbach">
+        <Liczby />
+      </Sekcja>
+    )
+  }
 </Strona>
 
 <style>
-  .powitanie {
-    padding-block: var(--zhp-odstep-5);
+  .zhp-dalej {
+    margin: var(--zhp-space-8) 0 0;
   }
 </style>

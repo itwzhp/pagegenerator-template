@@ -1,0 +1,15 @@
+# Przykładowy zespół szablonu. Imiona i nazwiska publikuj tylko za zgodą osób.
+nazwa: Komenda hufca
+kolejnosc: 1
+kadencja: 2023–2027
+email: hufiec@przykladowo.zhp.pl
+czlonkowie:
+  - stopien: hm.
+    imie: '[Imię Nazwisko]'
+    funkcja: komendantka hufca
+  - stopien: phm.
+    imie: '[Imię Nazwisko]'
+    funkcja: zastępca komendantki ds. programu
+  - stopien: pwd.
+    imie: '[Imię Nazwisko]'
+    funkcja: skarbnik hufca
